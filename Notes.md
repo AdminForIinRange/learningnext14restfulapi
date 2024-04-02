@@ -687,16 +687,140 @@ export const deletePost = async (formData) => {
 };
 ```
 
-##
+## Using RESTFUL API 
+
 
 ```js
-//
+
+
+// Conceptually, it's easy to understand because I have some experience in Node.js/Express.js, and we already went through server actions and already did some API fetching to JSON placeholder a few hours before, and the code is still there just commented out. The fields are the same anyways, like post, posts, slug, params, and such.
+
+// Restful API and server actions code are not that far off because they both use MongoDB connection and other built-in functions from MongoDB. To say which one is better is hard because I like both, but Restful API wins in cases because I already have some level of experience with it, and I plan to expand on it more. However, Next.js server actions are still pretty good, and I realize I've been doing some server actions when I was using Firebase unknowingly. But I really do want to expand on my restfulness and hopefully get better at using MongoDB, a real DB. I mean Firebase is also a real DB too and has way more built-in stuff like AUTH and stuff, so maybe using them both in conjunction would be a win-win.
+
 ```
 
-##
+```js
+
+//src\app\api\blog\route.js
+
+import { Post } from "@/lib/models";
+import { connectToDb } from "@/lib/utils";
+import { NextResponse } from "next/server";
+
+export const GET = async (req) => {
+  try {
+    connectToDb();
+
+    const posts = await Post.find();
+    return NextResponse.json(posts);
+    //NextResponse: This represents the response object that will be sent back to the client.
+    // .json(): This is a method that converts the data passed to it (in this case, posts) into JSON format.
+  } catch (err) {
+    console.log(err);
+    throw new Error(err);
+  }
+};
+
+// src\app\blog\page.jsx
+
+import PostCard from "@/components/postCard/PostCard";
+import styles from "./blog.module.css";
+import { getPosts } from "@/lib/data";
+
+// FETCH DATA WITH AN API
+
+const getData = async () => {
+  const res = await fetch("http://localhost:3000/api/blog", {
+    next: { revalidate: 3600 },
+  });
+
+  if (!res.ok) {
+    throw new Error("Something went wrong");
+  }
+
+  return res.json();
+};
+
+const BlogPage = async () => {
+  // FETCH DATA WITH API (RESTFUL API)
+  const posts = await getData();
+
+  // FETCH DATA WITHOUT API (SERVER ACTIONS)
+  // const posts = await getPosts();
+
+  return (
+    <div className={styles.container}>
+      {posts.map((post) => (
+        <PostCard key={post.id} post={post} />
+      ))}
+    </div>
+  );
+};
+
+export default BlogPage;
+
+
+```
+
+## Allow Api request to access [slug] 
+
 
 ```js
-//
+// src\app\api\blog\[slug]\route.js
+
+import { Post } from "@/lib/models";
+import { connectToDb } from "@/lib/utils";
+import { NextResponse } from "next/server";
+
+export const GET = async (req, {prams}) => {
+
+    const { slug } = prams;
+  try {
+    connectToDb();
+
+    const post = await Post.findOne({ slug }); //just like in src\lib\data.js
+    return NextResponse.json(post);
+    //NextResponse: This represents the response object that will be sent back to the client.
+    // .json(): This is a method that converts the data passed to it (in this case, posts) into JSON format.
+  } catch (err) {
+    console.log(err);
+    throw new Error(err);
+  }
+};
+
+
+// src\app\blog\[slug]\page.jsx
+
+// Define an asynchronous function named getData that takes a 'slug' parameter
+const getData = async (slug) => {
+  // Fetch data from the specified API endpoint using the provided 'slug'
+  const res = await fetch(`http://localhost:3000/api/blog/${slug}`, {
+    // Optional: Provide configuration for Next.js Incremental Static Regeneration
+    next: { revalidate: 3600 }, // Revalidate data every 3600 seconds (1 hour)
+  });
+
+  // Check if the response is not okay (HTTP status code other than 200)
+  if (!res.ok) {
+    // Throw an error if something went wrong with the request
+    throw new Error("Something went wrong");
+  }
+
+  // Return the response body as JSON
+  return res.json();
+};
+
+const SinglePostPage = async ({ params }) => {
+  // using params, slug is passed as a parameter its a buit in function in nextjs
+
+  const { slug } = params;
+  const post = await getData(slug);
+
+  // const post = await getPost(slug); //passing slug as a parameter in side getdata, slug's raw value is /blog/[slug]
+
+}
+
+export default SinglePostPage;
+
 ```
 
 ##

@@ -3,20 +3,21 @@ import React, { Suspense } from "react";
 import styles from "./singlePost.module.css";
 import PostUser from "@/components/postUser/PostUser";
 import { getPost } from "@/lib/data";
-// const getData = async (slug) => {
-//   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`); // using slug as a parameter
-//   // THIS WHOEL API IS STURCTED AROUND USER, POST'S AND OTHER DATA YOU WOULD SEE IN SOCIAL MEDIA
-//   if (!res.ok) {
-//     throw new Error("Something went wrong");
-//   }
+const getData = async (slug) => {
+  const res = await fetch(`http://localhost:3000/api/blog/${slug}`, {
+    next: { revalidate: 3600 },
+  });
 
-//   return res.json();
-// };
+  if (!res.ok) {
+    throw new Error("Something went wrong");
+  }
 
+  return res.json();
+};
 export const generateMetadata = async ({ params }) => {
   const { slug } = params;
 
-  const post = await getPost(slug);
+  const post = await getData(slug);
 
   return {
     title: post.title,
@@ -28,8 +29,9 @@ const SinglePostPage = async ({ params }) => {
   // using params, slug is passed as a parameter its a buit in function in nextjs
 
   const { slug } = params;
-  // const posts = await getData(slug);
-  const post = await getPost(slug); //passing slug as a parameter in side getdata, slug's raw value is /blog/[slug]
+  const post = await getData(slug);
+
+  // const post = await getPost(slug); //passing slug as a parameter in side getdata, slug's raw value is /blog/[slug]
 
   return (
     <div className={styles.container}>
