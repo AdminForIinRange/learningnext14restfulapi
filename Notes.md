@@ -728,7 +728,7 @@ export const GET = async (req) => {
 
     const posts = await Post.find();
     return NextResponse.json(posts);  //NextResponse: This represents the response object that will be sent back to the client.
-    
+
     // .json(): This is a method that converts the data passed to it (in this case, posts) into JSON format.
   } catch (err) {
     console.log(err);
@@ -857,10 +857,24 @@ try {
 
 ```
 
-##
+## Auth
 
 ```js
-//
+// Using Next-Auth from Auth.js
+//In this case we are using Github as a Auth method
+import NextAuth from "next-auth"; // Import the NextAuth library
+import GitHub from "next-auth/providers/github"; // Import the GitHub provider
+
+// Initialize NextAuth with the desired authentication providers
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  providers: [
+    GitHub({
+      clientId: process.env.GITHUB_ID, // GitHub OAuth client ID
+      secretSecret: process.env.GITHUB_SECRET, // GitHub OAuth client secret
+    }),
+  ],
+});
+
 ```
 
 ##
