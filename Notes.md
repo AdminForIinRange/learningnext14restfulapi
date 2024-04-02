@@ -523,6 +523,37 @@ export default ServerActionTest
 
 
 ```
+## action is for use server and handle submit is for use client
+ 
+```JS
+
+//works well and has no issues, it and handel submit is not that far apart
+
+  const handleInputLog = async (e) => { //you still need to pass in event
+    // he dose need a the event, it is automatically passed to the event handler function
+    "use server";
+
+    const { text } = Object.fromEntries(e); // since you don't have a state connected to your input with onChange
+    // you have to destructure it, and your event is an object too
+
+    console.log(text); //logging text, normally you can log state
+  };
+
+  return (
+    <div>
+      {/* extracts the event and auto passing it to the function within {} */}
+      <form onSubmit={handleInputLog}> 
+
+        <input type="text" placeholder="text" name="text" /> 
+        <button>click</button>   {/*  form auto assign's this a type="submit" */}
+      </form>
+    </div>
+  );
+};
+
+```
+
+
 
 ## Server Side Input's with "action={}" and name
 
@@ -566,7 +597,7 @@ export default ServerActionTest;
 import { Post } from "./models";
 import { connectToDb } from "./utils";
 
-/* //so when i use Action, i am directing the location of where the data event will be sent to.
+/* //so when i use Action, i am directing the location of where the event will be sent to.
      BTW: React automatically passes the event object to the event handler function
      */
 

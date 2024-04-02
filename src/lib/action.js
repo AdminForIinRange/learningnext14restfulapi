@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { Post } from "./models";
 import { connectToDb } from "./utils";
 
-export const addPost = async (formData) => {
+export const addPost = async (formData) => { // formData is an object containing data from the form
 
 
   const { title, desc, slug, userId } = Object.fromEntries(formData);
