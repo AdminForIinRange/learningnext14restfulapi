@@ -3,9 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { Post } from "./models";
 import { connectToDb } from "./utils";
+import { signIn } from "./auth";
 
-export const addPost = async (formData) => { // formData is an object containing data from the form
-
+export const addPost = async (formData) => {
+  // formData is an object containing data from the form
 
   const { title, desc, slug, userId } = Object.fromEntries(formData);
 
@@ -15,10 +16,9 @@ export const addPost = async (formData) => { // formData is an object containing
     await newPost.save();
 
     console.log("new post added");
-    revalidatePath(`/blog`); 
-    // The revalidate option in Next.js refreshes the content 
+    revalidatePath(`/blog`);
+    // The revalidate option in Next.js refreshes the content
     //of the page on the server-side, not in the browser.
-
   } catch (err) {
     console.log(err);
   }
@@ -26,25 +26,28 @@ export const addPost = async (formData) => { // formData is an object containing
   console.log(title, desc, slug, userId);
 };
 
-
-
 export const deletePost = async (formData) => {
-
-
-  const { id} = Object.fromEntries(formData);
+  const { id } = Object.fromEntries(formData);
 
   try {
     connectToDb();
-  
+
     await Post.findByIdAndDelete(id); //removing post via Id from form data
 
     console.log(" post deleted");
-    revalidatePath(`/blog`); 
-   
-
+    revalidatePath(`/blog`);
   } catch (err) {
     console.log(err);
   }
 
   console.log(id);
+};
+
+
+
+
+export const handleGithubLogin = async () => {
+
+
+  await signIn("github");
 };
