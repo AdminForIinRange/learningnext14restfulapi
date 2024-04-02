@@ -36,12 +36,9 @@ const SinglePostPage = async ({ params }) => {
   return (
     <div className={styles.container}>
       <div className={styles.imgContainer}>
-      {post?.img &&  <Image
-          src={post?.img}
-          alt=""
-          fill
-          className={styles.img}
-        />}
+        {post?.img && (
+          <Image src={post?.img} alt="" fill className={styles.img} />
+        )}
       </div>
 
       <div className={styles.textContainer}>

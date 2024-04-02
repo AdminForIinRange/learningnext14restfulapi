@@ -16,7 +16,6 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-
 # Notes.md from Next.js (Update and Format Every Day until Project is complete)
 
 # Read these Notes if need be
@@ -304,16 +303,11 @@ const posts = [
 ];
 ```
 
-
-
 ```js
-
-
 // After logging in and creating a project, and creating a cluster, you need to press "Connect" and follow the instructions.
 // - npm install mongodb
 
 // - mongodb+srv://bhattaraianjesh123:<password>@cluster0.l7tduy7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-
 
 // simple boilerplate code:  boilerplate code means you don't have to memorize it
 
@@ -359,31 +353,31 @@ MONGO_URI = ""; // incorrect
 ```js
 // For a better SEO
 //When the title is generated, the %s placeholder will be replaced with a specific value. For example, if you have a page with the title "About Us", the %s will be replaced with "About Us", resulting in the title "About Us | Next.js 14".
-export const metadata = { //layout.jsx 
+export const metadata = {
+  //layout.jsx
   title: {
-    default:"Next.js 14 Homepage",
-    template:"%s | Next.js 14" // it seems like a place holder, like a template `%{pageTitle}`
+    default: "Next.js 14 Homepage",
+    template: "%s | Next.js 14", // it seems like a place holder, like a template `%{pageTitle}`
   },
   description: "Next.js starter app description",
 };
 //-----------------------
 
-export const metadata = { // about/page.jsx
+export const metadata = {
+  // about/page.jsx
   title: "About Page",
   description: "About description",
 };
-
 ```
 
-
- ## Server Action's Example
+## Server Action's Example
 
 ```js
 
 
 
 //lib/action
-const sayHello =  async () => { // when use server it has to be async 
+const sayHello =  async () => { // when use server it has to be async
     "use server";
 
     console.log("hello");
@@ -394,23 +388,23 @@ const sayHello =  async () => { // when use server it has to be async
 import React from 'react'
 import {sayHello} from "@/lib/action" // I forgot the function name was sayHello and not say(h)ello (lower case "h"). Make sure you always have a good naming convention to stop these types of stupid errors, and actually read the code. Maybe TypeScript is good, but then again I didn't read the error correctly. Maybe I should have hovered over 'i' and read it.
 
- 
+
 const ServerActionTest  = () => {   // Yeah, so action outputs anything as long as a button is present, basically like a form submit, but without the id of "submit".
   return (
 
     <div>
-    <form action={sayHello}>  <button> test </button> </form> 
-  
+    <form action={sayHello}>  <button> test </button> </form>
+
     </div>
 
   )
 }
 
-export default ServerActionTest 
+export default ServerActionTest
 
     // If "use server" is included, your function will be executed on the server
     // and it needs to be an async function.
-    // If it is not intended to be a server component, you can leave it as it is. 
+    // If it is not intended to be a server component, you can leave it as it is.
     // You can remove "async" if its not intended to bt asynchronous. In the page.jsx, you must add "use client"
     // to tell the renderer it is a client component, so render it in the client, please.
 
@@ -445,13 +439,12 @@ const ServerActionTest  = () => {
   )
 }
 
-export default ServerActionTest 
+export default ServerActionTest
 
 
 
 
 ```
-
 
 # Extra Info Regarding Next.js
 
@@ -473,4 +466,3 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-

@@ -1,7 +1,6 @@
 import React from "react";
 import { addPost, deletePost } from "@/lib/action";
 const ServerActionTest = () => {
- 
   return (
     <div>
       {/* //so when i use Action, i am directing the location of where the data event will be sent to.

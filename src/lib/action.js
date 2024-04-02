@@ -43,19 +43,10 @@ export const deletePost = async (formData) => {
   console.log(id);
 };
 
-
-
-
 export const handleGithubLogin = async () => {
-
-  
   const session = await auth();
-
 
   await signIn("github");
 
-  
   console.log(session);
 };
-
-
