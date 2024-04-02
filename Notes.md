@@ -357,6 +357,21 @@ export const metadata = {
   title: "About Page",
   description: "About description",
 };
+//---------------------
+
+// src\app\blog\[slug]\page.jsx
+
+export const generateMetadata = async ({ params }) => {
+  const { slug } = params;
+
+  const post = await getData(slug);
+
+  return {
+    title: post.title,
+    description: post.desc,
+  };
+};
+
 ```
 
 
@@ -687,7 +702,7 @@ export const deletePost = async (formData) => {
 };
 ```
 
-## Using RESTFUL API 
+## RestFul API
 
 
 ```js
@@ -696,8 +711,8 @@ export const deletePost = async (formData) => {
 // Conceptually, it's easy to understand because I have some experience in Node.js/Express.js, and we already went through server actions and already did some API fetching to JSON placeholder a few hours before, and the code is still there just commented out. The fields are the same anyways, like post, posts, slug, params, and such.
 
 // Restful API and server actions code are not that far off because they both use MongoDB connection and other built-in functions from MongoDB. To say which one is better is hard because I like both, but Restful API wins in cases because I already have some level of experience with it, and I plan to expand on it more. However, Next.js server actions are still pretty good, and I realize I've been doing some server actions when I was using Firebase unknowingly. But I really do want to expand on my restfulness and hopefully get better at using MongoDB, a real DB. I mean Firebase is also a real DB too and has way more built-in stuff like AUTH and stuff, so maybe using them both in conjunction would be a win-win.
-
 ```
+## Using RESTFUL API, GET via Route
 
 ```js
 
@@ -712,8 +727,8 @@ export const GET = async (req) => {
     connectToDb();
 
     const posts = await Post.find();
-    return NextResponse.json(posts);
-    //NextResponse: This represents the response object that will be sent back to the client.
+    return NextResponse.json(posts);  //NextResponse: This represents the response object that will be sent back to the client.
+    
     // .json(): This is a method that converts the data passed to it (in this case, posts) into JSON format.
   } catch (err) {
     console.log(err);
@@ -762,7 +777,7 @@ export default BlogPage;
 
 ```
 
-## Allow Api request to access [slug] 
+## Allow Api request to access [slug] and GET via route
 
 
 ```js
@@ -823,10 +838,23 @@ export default SinglePostPage;
 
 ```
 
-##
+## DELETE via route
 
 ```js
-//
+export const DELETE = async (req, {prams}) => {
+
+  const { slug } = prams;
+try {
+  connectToDb();
+
+  const post = await Post.findByIdAndDelete({ slug }); //just like in src\lib\data.js
+  return NextResponse.json("deleted"); //NextResponse: This represents the response object that will be sent back to the client.
+} catch (err) {
+  console.log(err);
+  throw new Error(err);
+}
+};
+
 ```
 
 ##
