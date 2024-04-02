@@ -235,6 +235,8 @@ export const getUser = async (id) => {
   return posts.find((post) => post.id === id);
 };
 
+//-------------------------------------
+
 //src\app\blog\page.jsx
 
 import { getPosts } from "@/lib/data";
@@ -551,6 +553,8 @@ export default ServerActionTest
   );
 };
 
+//READ THE STUFF I WROTE AND BACK CHECKED BELOW
+
 ```
 
 
@@ -767,6 +771,8 @@ export const GET = async (req) => {
   }
 };
 
+//-------------------------------------
+
 // src\app\blog\page.jsx
 
 import PostCard from "@/components/postCard/PostCard";
@@ -812,6 +818,7 @@ export default BlogPage;
 
 
 ```js
+
 // src\app\api\blog\[slug]\route.js
 
 import { Post } from "@/lib/models";
@@ -834,6 +841,7 @@ export const GET = async (req, {prams}) => {
   }
 };
 
+//-------------------------------------
 
 // src\app\blog\[slug]\page.jsx
 
@@ -901,17 +909,66 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID, // GitHub OAuth client ID
-      secretSecret: process.env.GITHUB_SECRET, // GitHub OAuth client secret
+      clientSecret: process.env.GITHUB_SECRET, // GitHub OAuth client secret
     }),
   ],
 });
 
 ```
 
-##
+## Loggin Auth
 
 ```js
-//
+
+
+// src\app\api\auth\[...nextauth] 
+
+//this file name allows us to to map over all the auth fuction, within nextauth, so you dotn have to make aiginin, siginout session and such and such.
+
+
+//-------------------------------------
+//src\app\api\auth\[...nextauth]\route.js
+
+const { GET, POST } = require("@/lib/auth");
+
+export { GET, POST }
+
+//-------------------------------------
+
+// src\app\(auth)\login\page.jsx
+
+import { auth, signIn } from "@/lib/auth"; 
+
+import React from "react";
+
+const LoginPage = async () => {
+  const session = await auth();
+
+  console.log(session);
+
+ 
+  const handleLogin = async (e) => {
+
+    "use server";
+
+    const { text } = Object.fromEntries(e);
+    await signIn("github");
+    console.log(text);
+  };
+
+  return (
+    <div>
+      <form action={handleLogin}>
+        <input type="text" placeholder="text" name="text" />
+        <button>cLick</button>
+      </form>
+    </div>
+  );
+};
+
+export default LoginPage;
+
+
 ```
 
 ##
