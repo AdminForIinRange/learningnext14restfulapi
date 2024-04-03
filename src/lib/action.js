@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { Post } from "./models";
 import { connectToDb } from "./utils";
 import { auth, signIn, signOut } from "./auth";
+import bcrypt from "bcrypt";
 
 export const addPost = async (formData) => {
   // formData is an object containing data from the form
@@ -54,10 +55,8 @@ export const handleLogout = async () => {
 };
 
 export const register = async (formData) => {
-  const { username, email, password, passwordRepeat } = Object.fromEntries(formData);
-
-
-
+  const { username, email, password, passwordRepeat } =
+    Object.fromEntries(formData);
 
   if (password !== passwordRepeat) {
     return { error: "Passwords do not match" };
@@ -66,14 +65,19 @@ export const register = async (formData) => {
   try {
     connectToDb();
 
-    const user = await auth.getUserByEmail({username});
+    const user = await auth.getUserByEmail({ username });
 
-if (user) {
-   return { error: "Username already taken" };
+    if (user) {
+      return { error: "Username already taken" }; 
+      // if user email is not found/false, teh retun data sets sent to teh useFormState,
+      // and becomes the new state
+    }
 
-}
-    
-    const newUser = new User({ username, email, password });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({ username, email, password: hashedPassword }); 
+    // making password hashed via "bcrypt"
 
     await newUser.save();
 
