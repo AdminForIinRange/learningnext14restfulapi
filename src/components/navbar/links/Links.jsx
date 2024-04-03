@@ -59,13 +59,13 @@ const Links = ({ session }) => {
         )}
       </div>
 
-      <Image
-        className={styles.menuButton}
+      <Image 
+        className={styles.menuButton} // for mobile only
         src="/menu.png"
         alt="menu"
         width={30}
         height={30}
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={() => setOpen((prev) => !prev)} // for mobile only
       />
 
       {open && (
