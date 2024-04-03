@@ -530,7 +530,7 @@ export default ServerActionTest
     "use server";
 
     const { text } = Object.fromEntries(e); // since you don't have a state connected to your input with onChange
-    // you have to destructure it, and your event is an object too
+    // you have to destructrue it, and your event is an object too
 
     console.log(text); //logging text, normally you can log state
   };
@@ -663,7 +663,7 @@ import { connectToDb } from "./utils";
 
 export const addPost = async (formData) => {
   "use server";
-  // //creates a "new" instance of post then with the destured elemenst from   const { title, desc, slug, userId } = Object.fromEntries(formData),
+  // //creates a "new" instance of post then with the destrued elemenst from   const { title, desc, slug, userId } = Object.fromEntries(formData),
   const { title, desc, slug, userId } = Object.fromEntries(formData);
 
   try {
@@ -709,7 +709,7 @@ import { deletePost } from "@/lib/action";
 
 //lib/action.js
 
-// export const deletePost = async (formData) Tt takes in in the event from the input given by the action={deletePost} and destructure's the id
+// export const deletePost = async (formData) Tt takes in in the event from the input given by the action={deletePost} and destructrue's the id
 
 export const deletePost = async (formData) => {
   const { id } = Object.fromEntries(formData);
@@ -949,56 +949,42 @@ const LoginPage = async () => {
 
 export default LoginPage;
 ```
- 
+
 ## handleGithubLogin to action.js and signIn("github"); via Auth.js
 
 ```js
-
-export const handleGithubLogin = async () => { // its best practice to put all your serve actions/function's/component's in one file
-
+export const handleGithubLogin = async () => {
+  // its best practice to put all your serve actions/function's/component's in one file
 
   await signIn("github");
-
-
 };
-
-
-
 ```
 
 ## handleLogout via signOut("github") via Auth.js
 
 ```js
-
-
-export const handleLogout = async () => { 
-
-
-  await signOut("github");  // pretty rudimentary, naming convention, although i would of perrfed logot, not signout
+export const handleLogout = async () => {
+  await signOut("github"); // pretty rudimentary, naming convention, although i would of perrfed logot, not signout
 
   console.log(session);
 };
-
 ```
 
 ## When a button is clicked inside a form, it auto refresh's, its a default behavior
 
 ```js
-
 const LoginPage = async () => {
-
-  
   const session = await auth();
 
   console.log(session);
 
   return (
     <div>
-      <form action={handleGithubLogin}> 
-   {/* When a button is clicked inside a form, it automatically refreshes the page 
+      <form action={handleGithubLogin}>
+        {/* When a button is clicked inside a form, it automatically refreshes the page 
    because handleGithubLogin does not have an e.preventDefault(), so the page will refresh,
     meaning it reruns the page again, that's why it's logging session. */}
-{/* //acts like an onClick for now, until we expand the login form */}
+        {/* //acts like an onClick for now, until we expand the login form */}
 
         <button>cLick</button>
       </form>
@@ -1007,16 +993,15 @@ const LoginPage = async () => {
 };
 
 export default LoginPage;
-
 ```
 
-## Server and Client, async and useState conflict 
+## Server and Client, async and useState conflict
 
 ```js
 //
 
-const Links = async () => { 
-  
+const Links = async () => {
+
   //Async cant be assigned because its a server function, and below you are using useState, wish is a client function
 
   const [open, setOpen] = useState(false);
@@ -1024,10 +1009,16 @@ const Links = async () => {
   const session = await auth();  // if you are using await, your top function must be async
 ```
 
-## Passed Session as a prop to negate conflict above    
+## Passed Session as a prop to negate conflict above
 
 ```js
-// Passed Session as a prop to negative  conflict above  
+// Passed Session as a prop to negative  conflict above
+
+const session = await auth();
+
+// you could create a function that does this in the lib
+ //folder to reduce repetition and make it more organized
+
 
 // src\components\navbar\Navbar.jsx
 
@@ -1036,7 +1027,7 @@ const Navbar = async () => {
 
   return (
   <Links session={session} /> // I can do this because Navbar.jsx does not have any client functions; it is static and not dynamic. It does not take any user input. However, the components inside do. It makes sense that certain components inside Navbar.jsx are client-based, while the overall Navbar.jsx that holds the client is server-based. It feels optimized, and Next.js only renders what it needs.
- 
+
   )
 
 //---------------------------------------------
@@ -1049,10 +1040,17 @@ const Links = ({ session }) => {
 
 ```
 
-##
+## ?. operator, great for true checking: session.user?.isAdmin
 
 ```js
-//
+
+
+//Using session.user.isAdmin without the optional chaining operator ?. assumes that session.user always exists and has an isAdmin property. If session.user were to be null or undefined, accessing the isAdmin property directly would result in a runtime error, typically causing your application to crash.
+
+
+  {session?.user ?  (  // if session is true, and it contain's user and if that statement is true again then => , if session.user is also true, and it contains isAdmin and thats also true (&&) then render <>
+          <> 
+            {session.user?.isAdmin  && <NavLink item={{ title: "Admin", path: "/admin" }} />}{" "}
 ```
 
 ##
