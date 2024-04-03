@@ -52,3 +52,35 @@ export const handleGithubLogin = async () => {
 export const handleLogout = async () => {
   await signOut("github"); // pretty rudimentary, naming convention, although i would of perrfed logot, not signout
 };
+
+export const register = async (formData) => {
+  const { username, email, password, passwordRepeat } = Object.fromEntries(formData);
+
+
+
+
+  if (password !== passwordRepeat) {
+    return { error: "Passwords do not match" };
+  }
+
+  try {
+    connectToDb();
+
+    const user = await auth.getUserByEmail({username});
+
+if (user) {
+   return { error: "Username already taken" };
+
+}
+    
+    const newUser = new User({ username, email, password });
+
+    await newUser.save();
+
+    console.log("new user created");
+  } catch (err) {
+    console.log(err);
+
+    return { error: err.message };
+  }
+};
