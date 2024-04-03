@@ -1,27 +1,17 @@
+import LoginForm from "@/components/loginForm/loginForm";
 import { handleGithubLogin } from "@/lib/action";
+import styles from "./login.module.css";
 
-
-// From your /lib, they feel like little reducers,
-// like in Redux toolkit slice, just like how you would call them to authenticate with
-//Firebase, mainly for signing out like a function.
-
-import React from "react";
-
-const LoginPage = async () => {
-
-  
- 
+const LoginPage = () => {
 
   return (
-    <div>
-      <form action={handleGithubLogin}> 
-   {/* When a button is clicked inside a form, it automatically refreshes the page 
-   because handleGithubLogin does not have an e.preventDefault(), so the page will refresh,
-    meaning it reruns the page again, that's why it's logging session. */}
-{/* //acts like an onClick for now, until we expand the login form */}
-
-        <button>cLick</button>
-      </form>
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
+        <form action={handleGithubLogin}>
+          <button className={styles.github}>Login with Github</button>
+        </form>
+        <LoginForm />
+      </div>
     </div>
   );
 };

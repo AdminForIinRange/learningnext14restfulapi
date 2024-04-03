@@ -11,7 +11,7 @@ import Link from "next/link";
 const RegisterForm = () => {
   const [state, formAction] = useFormState(register, undefined); //register is a function defined in action.js, and the undefined is the default value of the state,
   // if register retuns undefined, then the default value of the state will be undefined but if
-  //if register retuns a value, then the default value of the state will be that value
+  //if register retuns some, then the default value of the state will be that value
 
   const router = useRouter();
 

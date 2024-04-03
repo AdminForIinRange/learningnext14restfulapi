@@ -88,3 +88,24 @@ export const register = async (formData) => {
     return { error: err.message };
   }
 };
+
+
+export const login = async (formData) => {
+  const { username , password } =
+    Object.fromEntries(formData);
+
+ 
+
+  try {
+
+    await signIn("credentials", {username, password });
+
+    
+
+    console.log("new user created");
+  } catch (err) {
+    console.log(err);
+
+    return { error: err.message };
+  }
+};
