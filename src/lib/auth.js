@@ -94,5 +94,8 @@ export const {
       }
       return true; // Return true if authentication is successful
     },
+    authorized({auth, request}){
+
+    }
   },
 });

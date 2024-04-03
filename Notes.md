@@ -64,7 +64,7 @@ export default ContactPage;
 
 
 
-// It's like using Navigate("/Auth") in React via react-router-dom, but it's better in Next.js because of its flexibility and simple functionality. Timestamp: 2:08 (watch the section; it's pretty interesting, forcing users to shift routes and qurry'ing and its pretty simple code ).
+// It's like using Navigate("/Auth") in React via react-router-dom, but it's better in Next.js because of its flexibility and simple functionality. Timestamp: 2:08 (watch the section; it's pretty interesting, forcing users to shift routes and querying and its pretty simple code ).
 
 
 
@@ -72,7 +72,7 @@ export default ContactPage;
 
 "use client"
 import Link from "next/link"
-import { usePathname, useRouter, useSearchParams } from "next/navigation" //updated and higher vir import dont forget Next/<import> is always recomened
+import { usePathname, useRouter, useSearchParams } from "next/navigation" //updated and higher vir import don't forget Next/<import> is always recommend
 
 const NavigationTestPage = () => {
 
@@ -104,13 +104,13 @@ export default NavigationTestPage
 ## API Fetching
 
 ```js
-//dont use  {cache: "no-store"} when you have large ammounst fo data changing, but if your data is retaibly conststant with minro changes then use it,
+//don't use  {cache: "no-store"} when you have large amounts fo data changing, but if your data is relatively constant with minor changes then use it,
 
 const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
   cache: "no-store",
 });
 
-//{revalidate:3600} will refesh your data evey 1 hour = 3600
+//{revalidate:3600} will refresh your data every 1 hour = 3600
 const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
   next: { revalidate: 3600 },
 });
@@ -133,7 +133,7 @@ const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
 
 // In Next.js, when using dynamic routes, you can access the route parameters (like the slug or post ID) through the params object in the page component's props. This is part of Next.js's built-in functionality for handling dynamic routes.
 
-const SinglePostPage = async ({ params }) => { // using params, slug is passed as a parameter its a buit in function in nextjs
+const SinglePostPage = async ({ params }) => { // using params, slug is passed as a parameter its a built in function in nextjs
 
 const {slug} = params
   const posts = await getData(slug) //passing slug as a parameter in side getdata (fetch func), slug's raw value is /blog/[slug]
@@ -150,7 +150,7 @@ import PostUser from "@/components/postUser/PostUser";
 
 const getData = async (slug) => {
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`); // using slug as a parameter
-  // THIS WHOEL API IS STURCTED AROUND USER, POST'S AND OTHER DATA YOU WOULD SEE IN SOCIAL MEDIA
+  // THIS WHOLE API IS STRUCTURED AROUND USER, POST'S AND OTHER DATA YOU WOULD SEE IN SOCIAL MEDIA
   if (!res.ok) {
     throw new Error("Something went wrong");
   }
@@ -907,7 +907,7 @@ export const {
 
 //this file name allows us to to map over all the auth function, within nextauth, so you don't have to make sigin-In, siginout, login  session and such and such.
 
-//using Auth.js you dont have to worry about cookies and session and what not, firebase auth is teh same too i believe
+//using Auth.js you don't have to worry about cookies and session and what not, firebase auth is teh same too i believe
 
 //-------------------------------------
 //src\app\api\auth\[...nextauth]\route.js
@@ -1226,7 +1226,7 @@ const login = async (credentials) => {
 ## Copy of old action.js code
 
 ```js
-"use server"; // dont forget this is Server Side Rendered
+"use server"; // don't forget this is Server Side Rendered
 
 import { revalidatePath } from "next/cache";
 import { Post } from "./models";
@@ -1297,7 +1297,7 @@ export const register = async (formData) => {
 
     if (user) {
       return { error: "Username already taken" };
-      // if user email is not found/false, teh retun data sets sent to teh useFormState,
+      // if user email is not found/false, teh return data sets sent to teh useFormState,
       // and becomes the new state
     }
 
@@ -1352,10 +1352,111 @@ function StatefulForm({}) {
 }
 ```
 
-##
+## Old auth.js code
 
 ```js
-//
+// Importing necessary modules and packages
+import NextAuth from "next-auth";
+import GitHub from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { connectToDb } from "./utils";
+import { User } from "./models";
+import bcryptjs from "bcryptjs";
+
+// Function to handle login process
+const login = async (credentials) => {
+  // Login: This function checks if the user's login email and password match the database.
+  //You're not creating a new user, you are simply checking if they exist in the user collection.
+  try {
+    connectToDb(); // Connecting to the database
+    const user = await User.findOne({ username: credentials.username }); // Finding user by username
+
+    // If user not found, throw an error
+    if (!user) {
+      throw new Error("Wrong credentials!");
+    }
+
+    // Comparing passwords
+    const isPasswordCorrect = await bcryptjs.compare(
+      credentials.password,
+      user.password,
+    );
+
+    // If password is incorrect, throw an error
+    if (!isPasswordCorrect) {
+      throw new Error("Wrong credentials!");
+    }
+
+    // If everything is correct, return the user
+    return user;
+  } catch (err) {
+    console.log(err); // Log any errors
+    throw new Error("Failed to login!"); // Throw error for failed login attempt
+  }
+};
+
+// Exporting handlers and authentication functions
+export const {
+  handlers: { GET, POST }, // Handlers for GET and POST requests
+  auth, // Authentication function
+  signIn, // Function to sign in
+  signOut, // Function to sign out
+} = NextAuth({
+  providers: [
+    GitHub({
+      clientId: process.env.GITHUB_ID, // GitHub client ID
+      clientSecret: process.env.GITHUB_SECRET, // GitHub client secret
+    }),
+    CredentialsProvider({
+      // This is an async function defined within CredentialsProvider. It takes credentials as an argument,
+      // representing the credentials entered by the user during the authentication process.
+
+      async authorize(credentials) {
+        try {
+          // Attempt to log in the user using the provided credentials
+          const user = await login(credentials);
+
+          // If login is successful, return the user object
+          return user;
+        } catch (err) {
+          // If login fails due to incorrect credentials or any other error, return null
+          return null;
+        }
+      },
+    }),
+  ],
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      console.log(user, account, profile); // Log user, account, and profile information
+      if (account.provider === "github") {
+        // If the authentication provider is GitHub
+        connectToDb(); // Connect to the database
+        try {
+          const user = await User.findOne({ email: profile.email }); // Find user by email
+
+          // If user not found, create a new user
+          if (!user) {
+            const newUser = new User({
+              username: profile.login, // Set username
+              email: profile.email, // Set email
+              img: profile.avatar_url, // Set profile image
+            });
+
+            await newUser.save(); // Save new user to the database
+          }
+        } catch (err) {
+          console.log(err); // Log any errors
+          return false; // Return false if there is an error
+        }
+      }
+      return true; // Return true if authentication is successful
+    },
+    authorized({auth, request}){
+
+    }
+  },
+});
+
 ```
 
 ##
