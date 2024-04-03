@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { Post } from "./models";
 import { connectToDb } from "./utils";
-import { auth, signIn } from "./auth";
+import { auth, signIn, signOut } from "./auth";
 
 export const addPost = async (formData) => {
   // formData is an object containing data from the form
@@ -44,9 +44,11 @@ export const deletePost = async (formData) => {
 };
 
 export const handleGithubLogin = async () => {
-  const session = await auth();
+  // its best practice to put all your serve actions/function's/component's in one file
 
   await signIn("github");
+};
 
-  console.log(session);
+export const handleLogout = async () => {
+  await signOut("github"); // pretty rudimentary, naming convention, although i would of perrfed logot, not signout
 };

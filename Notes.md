@@ -949,17 +949,36 @@ const LoginPage = async () => {
 
 export default LoginPage;
 ```
-
-##
+ 
+## handleGithubLogin to action.js and signIn("github"); via Auth.js
 
 ```js
-//
+
+export const handleGithubLogin = async () => { // its best practice to put all your serve actions/function's/component's in one file
+
+
+  await signIn("github");
+
+
+};
+
+
+
 ```
 
-##
+## handleLogout via signOut("github") via Auth.js
 
 ```js
-//
+
+
+export const handleLogout = async () => { 
+
+
+  await signOut("github");  // pretty rudimentary, naming convention, although i would of perrfed logot, not signout
+
+  console.log(session);
+};
+
 ```
 
 ##

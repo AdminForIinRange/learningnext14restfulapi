@@ -5,6 +5,7 @@ import Link from "next/link";
 import NavLink from "./navLink/navLink";
 import styles from "./links.module.css";
 import Image from "next/image";
+import { handleLogout } from "@/lib/action";
 
 const Links = () => {
   const links = [
@@ -42,8 +43,12 @@ const Links = () => {
 
         {session ? (
           <>
-            {isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}
+            {isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}{" "}
+            {/* Passing in a new obj to <NavLink /> */}
+            <form action={handleLogout}> 
             <button className={styles.button}>Logout</button>
+            </form>
+           
           </>
         ) : (
           <NavLink item={{ title: "Login", path: "/login" }} />

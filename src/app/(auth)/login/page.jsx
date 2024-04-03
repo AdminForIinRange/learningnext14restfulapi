@@ -1,4 +1,6 @@
 import { handleGithubLogin } from "@/lib/action";
+import { auth } from "@/lib/auth";
+
 // From your /lib, they feel like little reducers,
 // like in Redux toolkit slice, just like how you would call them to authenticate with
 //Firebase, mainly for signing out like a function.
