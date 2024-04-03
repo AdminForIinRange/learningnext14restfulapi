@@ -6,31 +6,34 @@ import NavLink from "./navLink/navLink";
 import styles from "./links.module.css";
 import Image from "next/image";
 import { handleLogout } from "@/lib/action";
+import { auth } from "@/lib/auth";
 
-const Links = () => {
-  const links = [
-    {
-      title: "Homepage",
-      path: "/",
-    },
-    {
-      title: "About",
-      path: "/about",
-    },
-    {
-      title: "Contact",
-      path: "/contact",
-    },
-    {
-      title: "Blog",
-      path: "/blog",
-    },
-  ];
+const links = [
+  {
+    title: "Homepage",
+    path: "/",
+  },
+  {
+    title: "About",
+    path: "/about",
+  },
+  {
+    title: "Contact",
+    path: "/contact",
+  },
+  {
+    title: "Blog",
+    path: "/blog",
+  },
+];
+
+
+const Links = ({ session }) => {
 
   const [open, setOpen] = useState(false);
 
-  const session = true;
   const isAdmin = true;
+
 
   return (
     <div className={styles.container}>

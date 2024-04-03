@@ -1010,16 +1010,43 @@ export default LoginPage;
 
 ```
 
-##
+## Server and Client, async and useState conflict 
 
 ```js
 //
+
+const Links = async () => { 
+  
+  //Async cant be assigned because its a server function, and below you are using useState, wish is a client function
+
+  const [open, setOpen] = useState(false);
+
+  const session = await auth();  // if you are using await, your top function must be async
 ```
 
-##
+## Passed Session as a prop to negate conflict above    
 
 ```js
-//
+// Passed Session as a prop to negative  conflict above  
+
+// src\components\navbar\Navbar.jsx
+
+const Navbar = async () => {
+  const session = await auth();
+
+  return (
+  <Links session={session} /> // I can do this because Navbar.jsx does not have any client functions; it is static and not dynamic. It does not take any user input. However, the components inside do. It makes sense that certain components inside Navbar.jsx are client-based, while the overall Navbar.jsx that holds the client is server-based. It feels optimized, and Next.js only renders what it needs.
+ 
+  )
+
+//---------------------------------------------
+
+// src\components\navbar\links\Links.jsx
+
+const Links = ({ session }) => {
+
+  const [open, setOpen] = useState(false);
+
 ```
 
 ##
