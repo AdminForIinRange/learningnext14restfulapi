@@ -1146,7 +1146,7 @@ const NavLink = ({ item }) => {
   },
 
 
-// Github Singin profile console.log 
+// Github Singin profile console.log
  console.log(profile);
 
 // i removed some sensitive information
@@ -1172,7 +1172,7 @@ const NavLink = ({ item }) => {
 
 
 const login = async (credentials) => {
-  // Login: This function checks if the user's login email and password match the database. 
+  // Login: This function checks if the user's login email and password match the database.
   //You're not creating a new user, you are simply checking if they exist in the user collection.
   try {
     connectToDb(); // Connecting to the database
@@ -1206,12 +1206,12 @@ const login = async (credentials) => {
 
       // This is an async function defined within CredentialsProvider. It takes credentials as an argument,
       // representing the credentials entered by the user during the authentication process.
-      
+
       async authorize(credentials) {
         try {
           // Attempt to log in the user using the provided credentials
           const user = await login(credentials);
-    
+
           // If login is successful, return the user object
           return user;
         } catch (err) {
@@ -1220,7 +1220,7 @@ const login = async (credentials) => {
         }
       },
     }),
-  
+
 ```
 
 ## Copy of old action.js code
@@ -1330,15 +1330,11 @@ export const login = async (formData) => {
     return { error: err.message };
   }
 };
-
 ```
-
-
 
 ## Example of useFormState from React Docs
 
 ```js
-
 import { useFormState } from "react-dom";
 
 async function increment(previousState, formData) {
@@ -1352,82 +1348,54 @@ function StatefulForm({}) {
       {state}
       <button formAction={formAction}>Increment</button>
     </form>
-  )
+  );
 }
-
 ```
 
-
-
-## 
+##
 
 ```js
-
 //
 ```
 
-
-
-## 
+##
 
 ```js
-
 //
 ```
 
-
-
-## 
+##
 
 ```js
-
 //
 ```
 
-
-
-## 
+##
 
 ```js
-
 //
 ```
 
-
-
-## 
+##
 
 ```js
-
 //
 ```
 
-
-
-## 
+##
 
 ```js
-
 //
 ```
 
-
-
-## 
+##
 
 ```js
-
 //
 ```
 
-
-
-## 
+##
 
 ```js
-
 //
 ```
-
-
-

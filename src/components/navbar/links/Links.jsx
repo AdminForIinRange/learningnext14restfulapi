@@ -27,13 +27,10 @@ const links = [
   },
 ];
 
-
 const Links = ({ session }) => {
-
   const [open, setOpen] = useState(false);
 
   const isAdmin = true;
-
 
   return (
     <div className={styles.container}>
@@ -46,20 +43,21 @@ const Links = ({ session }) => {
 
         {session?.user ? (
           <>
-            {session.user?.isAdmin  && <NavLink item={{ title: "Admin", path: "/admin" }} />}{" "}
+            {session.user?.isAdmin && (
+              <NavLink item={{ title: "Admin", path: "/admin" }} />
+            )}{" "}
             {/* Passing in a new obj to <NavLink /> */}
-            <form action={handleLogout}> 
-            <button className={styles.logout}>Logout</button> 
-            {/* // uses logout styles */}
+            <form action={handleLogout}>
+              <button className={styles.logout}>Logout</button>
+              {/* // uses logout styles */}
             </form>
-           
           </>
         ) : (
           <NavLink item={{ title: "Login", path: "/login" }} />
         )}
       </div>
 
-      <Image 
+      <Image
         className={styles.menuButton} // for mobile only
         src="/menu.png"
         alt="menu"

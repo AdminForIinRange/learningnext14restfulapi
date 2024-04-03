@@ -1,4 +1,4 @@
-"use client";  // this is a client/browser component indefinitely, from the amount of
+"use client"; // this is a client/browser component indefinitely, from the amount of
 // react components and imports/functions like useState, useEffect, etc.
 
 import { register } from "@/lib/action";
@@ -39,6 +39,3 @@ const RegisterForm = () => {
 };
 
 export default RegisterForm;
-
-
-

@@ -5,12 +5,9 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 
 const Navbar = async () => {
-  const session = await auth(); 
+  const session = await auth();
   // you could create a function that does this in the lib
   //folder to reduce repetition and make it more organized
-
-
-
 
   return (
     <div className={styles.container}>
