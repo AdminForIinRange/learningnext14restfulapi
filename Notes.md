@@ -981,10 +981,33 @@ export const handleLogout = async () => {
 
 ```
 
-##
+## When a button is clicked inside a form, it auto refresh's, its a default behavior
 
 ```js
-//
+
+const LoginPage = async () => {
+
+  
+  const session = await auth();
+
+  console.log(session);
+
+  return (
+    <div>
+      <form action={handleGithubLogin}> 
+   {/* When a button is clicked inside a form, it automatically refreshes the page 
+   because handleGithubLogin does not have an e.preventDefault(), so the page will refresh,
+    meaning it reruns the page again, that's why it's logging session. */}
+{/* //acts like an onClick for now, until we expand the login form */}
+
+        <button>cLick</button>
+      </form>
+    </div>
+  );
+};
+
+export default LoginPage;
+
 ```
 
 ##

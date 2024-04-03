@@ -8,14 +8,20 @@ import { auth } from "@/lib/auth";
 import React from "react";
 
 const LoginPage = async () => {
+
+  
   const session = await auth();
 
   console.log(session);
 
   return (
     <div>
-      <form action={handleGithubLogin}>
-        {/* //acts like an onClick for now, untill we expand teh login from */}
+      <form action={handleGithubLogin}> 
+   {/* When a button is clicked inside a form, it automatically refreshes the page 
+   because handleGithubLogin does not have an e.preventDefault(), so the page will refresh,
+    meaning it reruns the page again, that's why it's logging session. */}
+{/* //acts like an onClick for now, until we expand the login form */}
+
         <button>cLick</button>
       </form>
     </div>
