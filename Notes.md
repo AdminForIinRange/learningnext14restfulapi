@@ -1165,10 +1165,62 @@ const NavLink = ({ item }) => {
 
 ```
 
-##
+## Cheak if user's Login matches the DB
 
 ```js
-//
+
+
+
+const login = async (credentials) => {
+  // Login: This function checks if the user's login email and password match the database. 
+  //You're not creating a new user, you are simply checking if they exist in the user collection.
+  try {
+    connectToDb(); // Connecting to the database
+    const user = await User.findOne({ username: credentials.username }); // Finding user by username
+
+    // If user not found, throw an error
+    if (!user) {
+      throw new Error("Wrong credentials!");
+    }
+
+    // Comparing passwords
+    const isPasswordCorrect = await bcryptjs.compare(credentials.password, user.password);
+
+    // If password is incorrect, throw an error
+    if (!isPasswordCorrect) {
+      throw new Error("Wrong credentials!");
+    }
+
+    // If everything is correct, return the user
+    return user;
+
+  } catch (err) {
+    console.log(err); // Log any errors
+    throw new Error("Failed to login!"); // Throw error for failed login attempt
+  }
+};
+
+
+
+  CredentialsProvider({
+
+      // This is an async function defined within CredentialsProvider. It takes credentials as an argument,
+      // representing the credentials entered by the user during the authentication process.
+      
+      async authorize(credentials) {
+        try {
+          // Attempt to log in the user using the provided credentials
+          const user = await login(credentials);
+    
+          // If login is successful, return the user object
+          return user;
+        } catch (err) {
+          // If login fails due to incorrect credentials or any other error, return null
+          return null;
+        }
+      },
+    }),
+  
 ```
 
 ##
