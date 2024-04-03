@@ -1053,16 +1053,50 @@ const Links = ({ session }) => {
             {session.user?.isAdmin  && <NavLink item={{ title: "Admin", path: "/admin" }} />}{" "}
 ```
 
-##
+## junior vs senior diffenace in code quilty (i think)
 
 ```js
-//
+//junior 
+
+  if (session === null) {
+    console.log("no user")
+  } else(
+    console.log(session.user.name)
+  )
+
+
+  //senior 
+
+    {session ? console.log(session.user.name) : console.log("no user")}
+  
 ```
 
-##
+## Weird CSS Code, Either, high lvl css or bad code idk
 
 ```js
-//
+const NavLink = ({ item }) => {
+  const pathName = usePathname();
+  return (
+
+        // Click on the overlay links; they will all become rounded.
+// If the pathname === item path, and if that's true,
+// then change the class to active, which just changes
+// the color of the background and font. It was always rounded
+// and had a block around it, just not no bg color; that's why it didn't show.
+
+    <Link
+      className={`${styles.container} 
+      
+      ${ // just read the func its simple
+        pathName === item.path && styles.active // is pathname "url/ur" is equal to item.title then active class will
+      }`}
+      href={item.path}
+    >
+      {" "}
+      {item.title}
+    </Link>
+  );
+};
 ```
 
 ##

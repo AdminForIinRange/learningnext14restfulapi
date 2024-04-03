@@ -1,5 +1,5 @@
 import { handleGithubLogin } from "@/lib/action";
-import { auth } from "@/lib/auth";
+
 
 // From your /lib, they feel like little reducers,
 // like in Redux toolkit slice, just like how you would call them to authenticate with
@@ -10,9 +10,7 @@ import React from "react";
 const LoginPage = async () => {
 
   
-  const session = await auth();
-
-  console.log(session);
+ 
 
   return (
     <div>

@@ -49,7 +49,8 @@ const Links = ({ session }) => {
             {session.user?.isAdmin  && <NavLink item={{ title: "Admin", path: "/admin" }} />}{" "}
             {/* Passing in a new obj to <NavLink /> */}
             <form action={handleLogout}> 
-            <button className={styles.button}>Logout</button>
+            <button className={styles.logout}>Logout</button> 
+            {/* // uses logout styles */}
             </form>
            
           </>
