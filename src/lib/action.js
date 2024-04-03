@@ -1,30 +1,35 @@
-"use server"; // dont forget this is Server Side Rendered
+"use server";
 
 import { revalidatePath } from "next/cache";
-import { Post } from "./models";
+import { Post, User } from "./models";
 import { connectToDb } from "./utils";
-import { auth, signIn, signOut } from "./auth";
-import bcryptjs from "bcryptjs";
+import { signIn, signOut } from "./auth";
+import bcrypt from "bcryptjs";
 
-export const addPost = async (formData) => {
-  // formData is an object containing data from the form
+export const addPost = async (prevState,formData) => {
+  // const title = formData.get("title");
+  // const desc = formData.get("desc");
+  // const slug = formData.get("slug");
 
   const { title, desc, slug, userId } = Object.fromEntries(formData);
 
   try {
     connectToDb();
-    const newPost = new Post({ title, desc, slug, userId });
-    await newPost.save();
+    const newPost = new Post({
+      title,
+      desc,
+      slug,
+      userId,
+    });
 
-    console.log("new post added");
-    revalidatePath(`/blog`);
-    // The revalidate option in Next.js refreshes the content
-    //of the page on the server-side, not in the browser.
+    await newPost.save();
+    console.log("saved to db");
+    revalidatePath("/blog");
+    revalidatePath("/admin");
   } catch (err) {
     console.log(err);
+    return { error: "Something went wrong!" };
   }
-
-  console.log(title, desc, slug, userId);
 };
 
 export const deletePost = async (formData) => {
@@ -33,29 +38,65 @@ export const deletePost = async (formData) => {
   try {
     connectToDb();
 
-    await Post.findByIdAndDelete(id); //removing post via Id from form data
-
-    console.log(" post deleted");
-    revalidatePath(`/blog`);
+    await Post.findByIdAndDelete(id);
+    console.log("deleted from db");
+    revalidatePath("/blog");
+    revalidatePath("/admin");
   } catch (err) {
     console.log(err);
+    return { error: "Something went wrong!" };
   }
+};
 
-  console.log(id);
+export const addUser = async (prevState,formData) => {
+  const { username, email, password, img } = Object.fromEntries(formData);
+
+  try {
+    connectToDb();
+    const newUser = new User({
+      username,
+      email,
+      password,
+      img,
+    });
+
+    await newUser.save();
+    console.log("saved to db");
+    revalidatePath("/admin");
+  } catch (err) {
+    console.log(err);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const deleteUser = async (formData) => {
+  const { id } = Object.fromEntries(formData);
+
+  try {
+    connectToDb();
+
+    await Post.deleteMany({ userId: id });
+    await User.findByIdAndDelete(id);
+    console.log("deleted from db");
+    revalidatePath("/admin");
+  } catch (err) {
+    console.log(err);
+    return { error: "Something went wrong!" };
+  }
 };
 
 export const handleGithubLogin = async () => {
-  // its best practice to put all your serve actions/function's/component's in one file
-
+  "use server";
   await signIn("github");
 };
 
 export const handleLogout = async () => {
-  await signOut("github"); // pretty rudimentary, naming convention, although i would of perrfed logot, not signout
+  "use server";
+  await signOut();
 };
 
-export const register = async (formData) => {
-  const { username, email, password, passwordRepeat } =
+export const register = async (previousState, formData) => {
+  const { username, email, password, img, passwordRepeat } =
     Object.fromEntries(formData);
 
   if (password !== passwordRepeat) {
@@ -65,40 +106,43 @@ export const register = async (formData) => {
   try {
     connectToDb();
 
-    const user = await auth.getUserByEmail({ username });
+    const user = await User.findOne({ username });
 
     if (user) {
-      return { error: "Username already taken" };
-      // if user email is not found/false, teh retun data sets sent to teh useFormState,
-      // and becomes the new state
+      return { error: "Username already exists" };
     }
 
-    const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(password, salt);
-    // this hasing, bcryptjs thing is pretty cool, maybe i can use it in other project, not just about Auth
-    const newUser = new User({ username, email, password: hashedPassword });
-    // making password hashed via "bcryptjs"
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      img,
+    });
 
     await newUser.save();
+    console.log("saved to db");
 
-    console.log("new user created");
+    return { success: true };
   } catch (err) {
     console.log(err);
-
-    return { error: err.message };
+    return { error: "Something went wrong!" };
   }
 };
 
-export const login = async (formData) => {
+export const login = async (prevState, formData) => {
   const { username, password } = Object.fromEntries(formData);
 
   try {
     await signIn("credentials", { username, password });
-
-    console.log("new user created");
   } catch (err) {
     console.log(err);
 
-    return { error: err.message };
+    if (err.message.includes("CredentialsSignin")) {
+      return { error: "Invalid username or password" };
+    }
+    throw err;
   }
 };
