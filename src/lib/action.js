@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { Post } from "./models";
 import { connectToDb } from "./utils";
 import { auth, signIn, signOut } from "./auth";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 
 export const addPost = async (formData) => {
   // formData is an object containing data from the form
@@ -68,16 +68,16 @@ export const register = async (formData) => {
     const user = await auth.getUserByEmail({ username });
 
     if (user) {
-      return { error: "Username already taken" }; 
+      return { error: "Username already taken" };
       // if user email is not found/false, teh retun data sets sent to teh useFormState,
       // and becomes the new state
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const newUser = new User({ username, email, password: hashedPassword }); 
-    // making password hashed via "bcrypt"
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(password, salt);
+    // this hasing, bcryptjs thing is pretty cool, maybe i can use it in other project, not just about Auth
+    const newUser = new User({ username, email, password: hashedPassword });
+    // making password hashed via "bcryptjs"
 
     await newUser.save();
 
@@ -89,18 +89,11 @@ export const register = async (formData) => {
   }
 };
 
-
 export const login = async (formData) => {
-  const { username , password } =
-    Object.fromEntries(formData);
-
- 
+  const { username, password } = Object.fromEntries(formData);
 
   try {
-
-    await signIn("credentials", {username, password });
-
-    
+    await signIn("credentials", { username, password });
 
     console.log("new user created");
   } catch (err) {
