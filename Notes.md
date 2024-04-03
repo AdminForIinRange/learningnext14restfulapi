@@ -1049,26 +1049,24 @@ const Links = ({ session }) => {
 
 
   {session?.user ?  (  // if session is true, and it contain's user and if that statement is true again then => , if session.user is also true, and it contains isAdmin and thats also true (&&) then render <>
-          <> 
+          <>
             {session.user?.isAdmin  && <NavLink item={{ title: "Admin", path: "/admin" }} />}{" "}
 ```
 
 ## junior vs senior diffenace in code quilty (i think)
 
 ```js
-//junior 
+//junior
 
-  if (session === null) {
-    console.log("no user")
-  } else(
-    console.log(session.user.name)
-  )
+if (session === null) {
+  console.log("no user");
+} else console.log(session.user.name);
 
+//senior
 
-  //senior 
-
-    {session ? console.log(session.user.name) : console.log("no user")}
-  
+{
+  session ? console.log(session.user.name) : console.log("no user");
+}
 ```
 
 ## Weird CSS Code, Either, high lvl css or bad code idk
@@ -1077,17 +1075,17 @@ const Links = ({ session }) => {
 const NavLink = ({ item }) => {
   const pathName = usePathname();
   return (
-
-        // Click on the overlay links; they will all become rounded.
-// If the pathname === item path, and if that's true,
-// then change the class to active, which just changes
-// the color of the background and font. It was always rounded
-// and had a block around it, just not no bg color; that's why it didn't show.
+    // Click on the overlay links; they will all become rounded.
+    // If the pathname === item path, and if that's true,
+    // then change the class to active, which just changes
+    // the color of the background and font. It was always rounded
+    // and had a block around it, just not no bg color; that's why it didn't show.
 
     <Link
       className={`${styles.container} 
       
-      ${ // just read the func its simple
+      ${
+        // just read the func its simple
         pathName === item.path && styles.active // is pathname "url/ur" is equal to item.title then active class will
       }`}
       href={item.path}
@@ -1099,16 +1097,72 @@ const NavLink = ({ item }) => {
 };
 ```
 
-##
+## My session Checker session?.user ? :
 
 ```js
-//
+{
+  session?.user
+    ? console.log(session.user?.name)
+    : console.log("no user, value: " + session);
+}
+//if session ture, and it conatains user, and if that statement is true then console log session.user.name else console log no user
 ```
 
-##
+## Creating new User via the Github Auth, via Auth.js and NextAuth "next-auth"
 
 ```js
-//
+
+// src\lib\auth.js
+
+
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      console.log(user, account, profile);
+      if (account.provider === "github") {
+        connectToDb();
+        try {
+          const user = await User.findOne({ email: profile.email });
+          // retieving the user email from db
+          if (!user) {
+            // if user email is not found/false
+            const newUser = new User({
+              //create new user
+              name: profile.name,
+              username: profile.login,
+              email: profile.email,
+              img: profile.avatar_url,
+            });
+
+            await newUser.save(); // saving the new user to db
+          }
+        } catch (err) {
+          console.log(err);
+          return false; // end the auth function with a false
+          // if there is an error (no lingering sessions)
+        }
+      }
+      return true;
+    },
+  },
+
+
+// Github Singin profile console.log 
+ console.log(profile);
+
+// i removed some sensitive information
+
+  login: 'AdminForIinRange',
+  id: 91888685,
+  node_id: 'U_kgDOBXocLQ',
+  avatar_url: 'https://avatars.githubusercontent.com/u/91888685?v=4'
+  type: 'User',
+  site_admin: false,
+  name: 'Anjesh',
+  location: ' ',
+  email: '',
+
+}
+
 ```
 
 ##

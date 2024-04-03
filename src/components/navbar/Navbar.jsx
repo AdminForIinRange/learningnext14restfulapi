@@ -11,8 +11,7 @@ const Navbar = async () => {
 
 
 
-  {session?.user ?  console.log(session.user?.name) : console.log("no user, value: " + session)}
-  //if session ture, and it conatains user, and if that statement is true then console log session.user.name else console log no user
+
   return (
     <div className={styles.container}>
       <Link href={"/"} className={styles.logo}>
