@@ -330,7 +330,7 @@ MONGO_URI = ""; // incorrect
 //he keeps reandeirng
 
 {
-  post?.desc;
+  post?.desc; // ? means not required, in TS it means the vlaue is allowed to be || null 
 }
 
 //and at time i forget to add ? and my whole program falls into errors
